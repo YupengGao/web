@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Python Flask Bucket List App</title>
+
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css">
+    
+    
+    <script src="../static/js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+ <script>
+
+	$(document).ready(function(){
+		var id = getParameter('userId');
+    $.ajax({
+      url : '/getUserInfo',
+      type : 'POST',
+      data : {userID : id},
+      success: function(res){
+        var infoObj = JSON.parse(res);
+        if(infoObj.message == 'There is no infor for the user !'){
+            alert(infoObj.message);
+        }
+        // for (var i = 0; i < data.d.length; i++) {
+           $.each(infoObj,function(index, value){
+                $("#table").after( 
+                  "<tr><th>First Name</th><th>Last Name</th><th>Telephone</th><th>Email</th><th>Member_since</th><th>Location</th><th>Workinfo</th><th>School</th><th>Birthday</th><th>Gender</th><th>Average_rate</th></tr>" +
+                  "<tr><td>" + value.firstName + "</td>" +
+                            "<td>" + value.lastName + "</td>" +
+                            "<td>" + value.telephone + "</td>" +
+                            "<td>" + value.email + "</td>" +
+                            "<td>" + value.memberSince + "</td>" +
+                            "<td>" + value.location + "</td>" +
+                            "<td>" + value.workinfo + "</td>" +
+                            "<td>" + value.school + "</td>" +
+                            "<td>" + value.birthday + "</td>" +
+                            "<td>" + value.gender + "</td>" +
+                            "<td>" + value.average_rate + "</td></tr>" )
+                });
+          
+                            
+      },
+
+      error: function(error){
+        console.log(error);
+      }
+    });
+		$.ajax({
+			url : '/getVerifyPhotoList',
+			type : 'POST',
+      data : {userID : id},
+			success: function(res){
+				var wishObj = JSON.parse(res);
+        if(wishObj.message =='There is no verify photos for the user !'){
+          alert('There is no verify photos for the user');
+        }
+				$('#showImage').empty();
+				$('#listTemplate').tmpl(wishObj).appendTo('#showImage');	
+			},
+
+			error: function(error){
+				console.log(error);
+			}
+		});
+
+    
+		
+	});
+
+      function getParameter(theParameter) { 
+      var params = window.location.search.substr(1).split('&');
+     
+      for (var i = 0; i < params.length; i++) {
+        var p=params[i].split('=');
+      if (p[0] == theParameter) {
+        return decodeURIComponent(p[1]);
+      }
+      }
+      return false;
+    }
+
+    </script>
+    
+   <style>
+     .trash { color:rgb(209, 91, 71); }
+
+
+
+
+.panel-body .checkbox { display:inline-block;margin:0px; }
+
+
+.list-group { margin-bottom:0px; }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+   </style>
+   
+  </head>
+
+  <body>
+    <div class="container">
+    <div class="header">
+       <nav>
+          <ul class="nav nav-pills pull-right">
+      
+            <li role="presentation" class="active"><a href="/ShowverifyTrainer">go back</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Verify Trainer</h3>
+      </div>
+
+     <div style="overflow-x:auto;">
+  <table id = "table" type = "text/x-jQuery-tmpl">
+    <!-- <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Telephone</th>
+      <th>Email</th>
+      <th>Member_since</th>
+      <th>Location</th>
+      <th>Workinfo</th>
+      <th>School</th>
+      <th>Birthday</th>
+      <th>Gender</th>
+      <th>Average_rate</th>
+      
+    </tr> -->
+    <!-- <tr>
+      <td >${firstName}</td>
+      <td >${lastName}</td>
+      <td >${telephone}</td>
+      <td >${email}</td>
+      <td >${memberSince}</td>
+      <td >${location}</td>
+      <td >${workinfo}</td>
+      <td >${school}</td>
+      <td >${birthday}</td>
+      <td >${gender}</td>
+      <td >${averageRate}</td>
+    </tr> -->
+
+  </table>
+  <!--  -->
+</div>
+     <script id="listTemplate" type="text/x-jQuery-tmpl">
+       
+                            <div class="col-md-10">
+                            
+                            <img src="http://res.cloudinary.com/coopals/image/upload/${url}" alt="Pulpit Rock" style="width:500px;height:500px"></a>
+                            <p></p><p></p>
+                            </div>
+                      
+    </script>
+     <!-- <div class="container"> -->
+      <div class="row">
+          <!-- <div class="col-md-4"> -->
+              
+                  <div class="panel-body">
+
+                      <ul id="showImage" >
+                          
+   
+                          
+                      </ul>
+                  </div>
+                  
+              </div>
+
+    </div>
+      <footer class="footer">
+        <p>&copy; coopals 2016</p>
+      </footer>
+
+    </div>
+
+
+  </body>
+</html>
+

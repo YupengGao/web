@@ -1,0 +1,17 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }} - Backend Management</title>
+    {% else %}
+    <title>Backend Management</title>
+    {% endif %}
+  </head>
+  <body>
+    <div>Backend Management: <a href="/showLogin">login</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+  </body>
+  <div>website address: <a href="https://cloudinary.com/">cloudinary</a></div>
+  <div>website address: <a href="/ShowSearchPhoto">searchPhoto</a></div>
+  <div>website address: <a href="/ShowverifyTrainer">verifyTrainer</a></div>
+</html>

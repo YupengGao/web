@@ -1,0 +1,148 @@
+
+<html>
+ <head>
+    <title>Python Flask Bucket List App</title>
+
+   
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
+    <!-- <link href="../static/css/signup.css" rel="stylesheet"> -->
+    <script src="../static/js/jquery-1.11.2.js"></script> 
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+   <!--  <script src ="../static/js/delete.js"> </script> -->
+    <script >
+        $(function(){
+    $('#btnSearch').click(function(){
+        $.ajax({
+            url: '/searchPhoto',
+            data: $('form').serialize(),
+            type: 'POST',
+            success: function(response){
+                // alert(response)
+                var wishObj = JSON.parse(response);
+                // var wish = '';
+                $('#showImage').empty();
+                $.each(wishObj,function(index, value){
+                $('#showImage').empty();
+                $('#listTemplate').tmpl(wishObj).appendTo('#showImage');
+                });
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    });
+});
+    function Delete(elem){
+    $.ajax({
+      url : '/deletePhoto',
+      data : {url:$(elem).attr('photo-url')},
+      type : 'POST',
+      success: function(res){
+        // cd
+        // var result = JSON.parse(res);
+        if(res.status == 'OK'){
+          // $('#deleteModal').modal('hide');
+          // GetWishes();
+          alert("photo deleted");
+        }
+        else{
+          alert(result.status); 
+        }
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+  }
+
+  function verify(elem){
+    $.ajax({
+      url : '/verifyTrainer',
+      data : {url:$(elem).attr('photo-url')},
+      type : 'POST',
+      success: function(res){
+        // var result = JSON.parse(res);
+        if(res == 'OK'){
+          // $('#deleteModal').modal('hide');
+          // GetWishes();
+          alert("photo verified");
+        }
+        else{
+          alert(result.status); 
+        }
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+  }
+    </script>
+  
+    
+</head>
+    
+   
+
+	<div class="container">
+        <div class="header">
+            <nav>
+              <ul class="nav nav-pills pull-right">
+            <!-- <li role="presentation"><a href="/showAddWish">Add photo</a></li> -->
+                <li role="presentation" class="active"><a href="/logout">Logout</a></li>
+              </ul>
+            </nav>
+            <h3 class="text-muted">Search Photo By User Id</h3>
+          </div>
+		<div class="page-header">
+        	<h1 class="text-muted"></h1>
+       
+        <form class="form-signin">
+        <label for="UserId" class="sr-only">UserId</label>
+        <input type="UserId" name="UserId" id="UserId" class="form-control" placeholder="UserId" style = "width: 200px; height : 40px;margin: 0 auto;"  required autofocus>
+        <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button" style = "width: 200px; height : 45px;margin: 0 auto;">Search</button>
+         </div>
+     <!--  <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+        <li role="presentation"><a href="/showAddWish">Add Wish</a></li>
+            <li role="presentation" class="active"><a href="/logout">Logout</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Python Flask App</h3>
+      </div> -->
+ 
+     <script id="listTemplate" type="text/x-jQuery-tmpl">
+       
+                            <div class="col-md-4">
+                            <a href= "http://res.cloudinary.com/coopals/image/upload/${url}"  class="thumbnail">
+                            <img src="http://res.cloudinary.com/coopals/image/upload/${url}" alt="Pulpit Rock" style="width:150px;height:150px"></a>
+                            <p>${url}</p>
+                            <div class="pull-right action-buttons">
+                                <a photo-url=${url} onclick="verify(this)" ><span class="glyphicon glyphicon-check"></span></a>
+                               <a photo-url=${url} onclick="Delete(this)" ><span class="glyphicon glyphicon-trash"></span>
+                               </a>
+                            </div>
+                            </div>
+                      
+    </script>
+     <!-- <div class="container"> -->
+      <div class="row">
+          <!-- <div class="col-md-4"> -->
+              
+                  <div class="panel-body">
+
+                      <ul id="showImage" >
+                          
+   
+                          
+                      </ul>
+                  </div>
+                  
+              </div>
+          <!-- </div> -->
+          </div>
+   <!--  </div> -->
+  <!-- </div> -->
+</html>
